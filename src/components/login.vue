@@ -1,6 +1,6 @@
 <template>
   <div class="container" id="app">
-    <p class="topClass"><img src="http://123.56.12.92/images/daichaoLogo.png"/></p>
+    <p class="topClass"><img src=""/></p>
     <div class="contentBox">
       <div class="content">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="60px" class="demo-ruleForm">
@@ -27,6 +27,7 @@
 <script>
   import axios from 'axios';
   import qs from 'qs';
+  import stores from '@/stores/index'
   export default {
     data() {
       return {
@@ -67,6 +68,9 @@
             }).then((res)=>{
               if(res.data.msgCd=='ZYCASH-SUPERMARKET-200'){
                 localStorage.token=res.data.body.token;
+                stores.commit("Token",res.data.body.token);
+                stores.commit("getUsername",this.ruleForm.username);
+                stores.commit("getPassword",this.ruleForm.password);
                 this.$message({
                   message: '登录成功',
                   type: 'success'
@@ -88,8 +92,47 @@
       },
       goHome(){
         this.$router.push('/productList');
-      }
+      },
     },
+    mounted:function(){
+      this.ruleForm.username=this.getUsername;
+      this.ruleForm.password=this.getPassword;
+    },
+    computed:{
+      Token: {
+        // getter
+        get: function () {
+          return stores.state.token
+        },
+        //set
+        set: function (val) {
+          stores.state.token=val;
+        }
+      },
+      getUsername: {
+        // getter
+        get: function () {
+          return stores.state.username
+        },
+        //set
+        set: function (val) {
+          stores.state.username=val;
+        }
+      },
+      getPassword: {
+        // getter
+        get: function () {
+          return stores.state.password
+        },
+        //set
+        set: function (val) {
+          stores.state.password=val;
+        }
+      },
+      // token1:function(){
+      //   return stores.getters.getToken
+      // },
+    }
   }
 </script>
 

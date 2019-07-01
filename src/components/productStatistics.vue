@@ -22,7 +22,7 @@
         <el-button type="primary" style="width: 120px;margin-left:100px;" icon="el-icon-search" @click="IncomeBtn">查看收益</el-button>
         <el-tag style="width: 100px;margin-left:20px;margin-right: 30px;font-size: 16px;text-align: center;height: 40px;line-height: 40px" type="info">{{Income}}元</el-tag>
         <span @click="balanceBtn">查看余额</span>
-        <el-tag style="width: 100px;margin-left:20px;margin-right: 10px;font-size: 16px;text-align: center;height: 40px;line-height: 40px" type="info">{{balance}}元</el-tag>
+        <el-tag style="min-width: 100px;margin-left:20px;margin-right: 10px;font-size: 16px;text-align: center;height: 40px;line-height: 40px" type="info">{{balance}}元</el-tag>
       </div>
     </div>
     <template>
@@ -118,10 +118,10 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     methods: {
       detailClick(row) {
-
         var id=row.id;
         this.id=id;
         this.$router.push({
@@ -167,7 +167,7 @@
           headers:{
             "content-type":"application/x-download;charset=utf-8",
             "content-disposition":"attachment;filename=total.xls",
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           responseType: 'blob',
           params:{
@@ -189,7 +189,7 @@
           url:"http://"+this.baseUrl+"/super/admin/productinfo/getProductInfoList",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             pageNum: data1,
@@ -317,6 +317,11 @@
         Income:'',
         balance:'',
       }
+    },
+    computed:{
+      token:function () {
+        return stores.state.token
+      },
     }
   }
 </script>

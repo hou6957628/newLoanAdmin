@@ -41,6 +41,7 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     data() {
       return {
@@ -94,36 +95,26 @@
     },
     methods: {
       submitForm(formName) {
-        console.log(this.ruleForm.filename);
-
         this.$refs[formName].validate((valid) => {
           if (valid) {
             var param = new FormData();  // 创建form对象
             if(this.ruleForm.filename==null){
             }else {
-              param.append('file1', this.ruleForm.filename)  // 通过append向form对象添加数据
+              param.append('file1', this.ruleForm.filename);
             }
-            param.append('pname', this.ruleForm.pname) // 添加form表单中其他数据
-            param.append('type', 3) // 添加form表单中其他数据
-            param.append('h5Url', this.ruleForm.h5Url) // 添加form表单中其他数据
-            param.append('remark', this.ruleForm.remark) // 添加form表单中其他数据
-            param.append('accountId', this.ruleForm.accountId) // 添加form表单中其他数据
-            param.append('position', this.ruleForm.position) // 添加form表单中其他数据
-            param.append('id', this.id) // 添加form表单中其他数据
-            // var data1 = qs.stringify({
-            //   file1:this.ruleForm.filename,
-            //   pname:this.ruleForm.name,
-            //   type:this.electValue,
-            //   h5Url:this.ruleForm.url,
-            //   remark:this.ruleForm.desc,
-            //   accountId:this.electValue1,
-            // });
+            param.append('pname', this.ruleForm.pname);
+            param.append('type', 3);
+            param.append('h5Url', this.ruleForm.h5Url);
+            param.append('remark', this.ruleForm.remark);
+            param.append('accountId', this.ruleForm.accountId);
+            param.append('position', this.ruleForm.position);
+            param.append('id', this.id);
             axios({
               method:"POST",
               url:"http://"+this.baseUrl+"/super/admin/product/updateProductById",
               headers:{
                 'Content-Type':'application/x-www-form-urlencoded',
-                'Authorization': localStorage.token
+                'Authorization': this.token
               },
               data:param,
             }).then((res)=>{
@@ -153,25 +144,13 @@
         this.$set(this.ruleForm,"image",name);
         console.log(this.ruleForm.image);
       },
-      selectChange(){
-        console.log(this.electValue);
-        if(this.electValue=="1"){
-          this.$router.push('/addProduct');
-        }else if(this.electValue=="2"){
-          this.$router.push('/addIconProduct');
-        }else if(this.electValue=="3"){
-          this.$router.push('/addBannerProduct');
-        }else {
-          this.$router.push('/addProductList');
-        }
-      },
       getProductList(data){
         axios({
           method:"get",
           url:"http://"+this.baseUrl+"/super/admin/product/queryProductById",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             id:this.id
@@ -194,6 +173,11 @@
     mounted:function () {
       this.id=this.$route.params.id;
       this.getProductList(this.id);
+    },
+    computed:{
+      token:function () {
+        return stores.state.token
+      },
     }
   }
 </script>

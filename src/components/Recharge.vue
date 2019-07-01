@@ -93,6 +93,7 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     methods: {
       handleClick(row) {
@@ -123,7 +124,7 @@
           url:"http://"+this.baseUrl+"/super/admin/account/cashList",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             pageNum: data1,
@@ -160,7 +161,7 @@
             url:"http://"+this.baseUrl+"/super/admin/account/cash",
             headers:{
               'Content-Type':'application/x-www-form-urlencoded',
-              'Authorization': localStorage.token
+              'Authorization': this.token
             },
             params:{
               accountId	: this.id,
@@ -258,6 +259,11 @@
         dialogFormVisible:false,
         labelWidth:"100"
       }
+    },
+    computed:{
+      token:function () {
+        return stores.state.token
+      },
     }
   }
 </script>

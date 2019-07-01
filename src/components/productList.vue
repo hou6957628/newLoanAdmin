@@ -35,7 +35,7 @@
         <el-table-column
           prop="pname"
           label="产品名称"
-          min-width="120">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="remark"
@@ -110,10 +110,10 @@
 <script>
   import qs from 'qs';
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     methods: {
       handleClick(row) {
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/productStatistics/${id}`,
@@ -146,49 +146,42 @@
         });
       },
       bian2(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorIconProduct/${id}`,
         });
       },
       bian3(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorBannerProduct/${id}`,
         });
       },
       bian4(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorProductList/${id}`,
         });
       },
       bian5(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorIconProduct2/${id}`,
         });
       },
       bian6(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorIconProduct3/${id}`,
         });
       },
       bian7(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorIconProduct4/${id}`,
         });
       },
       bian8(row){
-        console.log(row.id);
         var id=row.id;
         this.$router.push({
           path: `/editorHomeProductList/${id}`,
@@ -200,19 +193,12 @@
         });
       },
       getProductList(data1,data2,data3,data4,){
-        // var suju =  qs.stringify({
-        //   pageNum: data1,
-        //   pageSize: data2,
-        //   pname: data3,
-        //   accountName: data4,
-        //   typeId: data5,
-        // });
         axios({
           method:"get",
           url:"http://"+this.baseUrl+"/super/admin/product/list",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             pageNum: data1,
@@ -249,7 +235,7 @@
           url:"http://"+this.baseUrl+"/super/admin/product/obtainedProduct",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           data:suju1,
         }).then((res)=>{
@@ -268,6 +254,11 @@
     mounted:function () {
       this.input10=this.$route.params.name;
       this.getProductList(1,10,this.input10,null);
+    },
+    computed:{
+      token:function () {
+        return stores.state.token;
+      }
     },
     data() {
       return {

@@ -85,6 +85,7 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     data() {
       return {
@@ -153,7 +154,7 @@
           url:"http://"+this.baseUrl+"/super/admin/productinfo/queryProductInfoById",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             id: this.id
@@ -196,7 +197,7 @@
           url:"http://"+this.baseUrl+"/super/admin/productinfo/updateProductInfoById",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             productId:this.ruleForm.productId,
@@ -246,6 +247,11 @@
       }
       this.getProductList(1,10);
     },
+    computed:{
+      token:function () {
+        return stores.state.token
+      },
+    }
   }
 </script>
 

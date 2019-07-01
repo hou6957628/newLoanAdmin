@@ -11,7 +11,7 @@
       <el-form-item label="产品分类" prop="region">
         <el-select v-model="electValue" @change="selectChange">
           <el-option
-            v-for="item in electData"
+            v-for="item in selectList"
             :key="item.key"
             :label="item.Id"
             :value="item.key">
@@ -78,19 +78,10 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     data() {
       return {
-        electData:[
-          {key:1,Id:'首页弹窗'},
-          {key:2,Id:'首页iconA'},
-          {key:3,Id:'首页banner'},
-          {key:4,Id:'产品列表'},
-          {key:5,Id:'首页iconB'},
-          {key:6,Id:'首页iconC'},
-          {key:7,Id:'首页iconD'},
-          {key:8,Id:'首页产品列表'},
-        ],
         electValue:'产品列表',
         electData1:[],
         electValue1:'',
@@ -187,7 +178,7 @@
               url:"http://"+this.baseUrl+"/super/admin/product/addProduct",
               headers:{
                 'Content-Type':'application/x-www-form-urlencoded',
-                'Authorization': localStorage.token
+                'Authorization': this.token
               },
               data:param,
             }).then((res)=>{
@@ -247,7 +238,7 @@
           url:"http://"+this.baseUrl+"/super/admin/product/toAddProduct",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
         }).then((res)=>{
           if(res.data.msgCd=='ZYCASH-SUPERMARKET-200'){
@@ -260,8 +251,19 @@
       }
     },
     mounted:function () {
-      this.ruleForm.name=localStorage.name;
+      this.ruleForm.name=this.productName;
       this.getProductList();
+    },
+    computed:{
+      selectList:function () {
+        return stores.state.electData
+      },
+      token:function () {
+        return stores.state.token
+      },
+      productName:function () {
+        return stores.state.productName
+      }
     }
   }
 </script>

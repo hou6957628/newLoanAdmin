@@ -11,7 +11,7 @@
       <el-form-item label="产品分类" prop="electValue">
         <el-select v-model="electValue" placeholder="请选择" @change="selectChange">
           <el-option
-            v-for="item in electData"
+            v-for="item in selectList"
             :key="item.key"
             :label="item.Id"
             :value="item.key">
@@ -58,6 +58,7 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     data() {
       return {
@@ -134,7 +135,7 @@
               url:"http://"+this.baseUrl+"/super/admin/product/addProduct",
               headers:{
                 'Content-Type':'application/x-www-form-urlencoded',
-                'Authorization': localStorage.token
+                'Authorization': this.token
               },
               data:param,
             }).then((res)=>{
@@ -190,7 +191,7 @@
           url:"http://"+this.baseUrl+"/super/admin/product/toAddProduct",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
         }).then((res)=>{
           if(res.data.msgCd=='ZYCASH-SUPERMARKET-200'){
@@ -203,8 +204,19 @@
       }
     },
     mounted:function () {
-      this.ruleForm.name=localStorage.name;
+      this.ruleForm.name=this.productName;
       this.getProductList();
+    },
+    computed:{
+      selectList:function () {
+        return stores.state.electData
+      },
+      token:function () {
+        return stores.state.token
+      },
+      productName:function () {
+        return stores.state.productName
+      }
     }
   }
 </script>

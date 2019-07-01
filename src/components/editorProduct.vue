@@ -41,6 +41,7 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     data() {
       return {
@@ -186,6 +187,11 @@
     mounted:function () {
       this.id=this.$route.params.id;
       this.getProductList(this.id);
+    },
+    computed:{
+      token:function () {
+        return stores.state.token
+      },
     }
   }
 </script>

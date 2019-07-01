@@ -133,6 +133,7 @@
 
 <script>
   import axios from 'axios'
+  import stores from '@/stores/index'
   export default {
     methods: {
       handleClick(row) {
@@ -196,7 +197,7 @@
           headers:{
             "content-type":"application/x-download;charset=utf-8",
             "content-disposition":"attachment;filename=total.xls",
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             name: this.value8,
@@ -222,7 +223,7 @@
           url:"http://"+this.baseUrl+"/super/admin/productinfo/getProductInfoListByName",
           headers:{
             'Content-Type':'application/x-www-form-urlencoded',
-            'Authorization': localStorage.token
+            'Authorization': this.token
           },
           params:{
             pageNum: data1,
@@ -258,7 +259,6 @@
     },
     mounted:function () {
       this.id=this.$route.params.id;
-      this.token=localStorage.token;
       this.getProductList(1,10);
     },
     data() {
@@ -305,8 +305,12 @@
         accountName: '',
         startTime:'',
         endTime:'',
-        token:""
       }
+    },
+    computed:{
+      token:function () {
+        return stores.state.token
+      },
     }
   }
 </script>
